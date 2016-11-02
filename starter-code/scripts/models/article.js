@@ -93,7 +93,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM articles WHERE id = ?', // DONE! <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -102,7 +102,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM articles' // DONE! <----TODO: delete all records from the articles table.
     );
   };
 
@@ -144,7 +144,8 @@
     });
   };
 
-// TODO: ensure that our table has been created.
+// DONE! TODO: ensure that our table has been created.
+  Article.createTable();
 
   module.Article = Article;
 })(window);
