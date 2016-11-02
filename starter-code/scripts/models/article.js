@@ -60,6 +60,8 @@
         /* TODO:
            1 - Use Article.loadAll to instanitate these rows,
            2 - invoke the function that was passed in to fectchAll */
+          Article.loadAll(rows);
+          nextFunction();
         } else {
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
