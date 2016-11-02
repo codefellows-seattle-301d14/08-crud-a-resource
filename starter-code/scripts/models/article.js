@@ -45,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': '', // <----- TODO: complete our SQL query here, inside the quotes.
+        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO: complete our SQL query here, inside the quotes.
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
