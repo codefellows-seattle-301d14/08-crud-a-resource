@@ -20,7 +20,14 @@
   Article.createTable = function() {
     // webDb helps us query our data
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS blogarticles (' +
+      'id INTEGER PRIMARY KEY, ' +
+      'title VARCHAR, ' +
+      'category VARCHAR, ' +
+      'author VARCHAR, ' +
+      'authorURL VARCHAR, ' +
+      'publishedOn DATE ' +
+      'body VARCHAR);', // TODO: What SQL command do we run here inside these quotes? DONE
       function() {
         console.log('Successfully set up the articles table.');
       }
