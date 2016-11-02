@@ -65,11 +65,13 @@
               article.insertRecord();
             });
             webDB.execute(
-              'SELECT * FROM articles', // <-----TODO: query our table for articles once more
+              'SELECT * FROM articles', // <-----DONE: query our table for articles once more
               function(rows) {
                 // TODO:
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
