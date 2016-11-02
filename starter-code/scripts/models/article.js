@@ -10,7 +10,7 @@
 
   Article.prototype.toHtml = function(scriptTemplateId) {
     var template = Handlebars.compile(scriptTemplateId.text());
-    this.daysAgo = parseInt((new Date() - new Date(this.publishedOn))/60/60/24/1000);
+    this.daysAgo = parseInt((new Date() - new Date(this.publishedOn)) / 60 / 60 / 24 / 1000);
     this.publishStatus = this.publishedOn ? 'published ' + this.daysAgo + ' days ago' : '(draft)';
     this.body = marked(this.body);
     return template(this);
@@ -45,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO: complete our SQL query here, inside the quotes.
+        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO: complete our SQL query here, inside the quotes. DONE
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -53,7 +53,7 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      '', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM blogarticles', // <-----TODO: fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
