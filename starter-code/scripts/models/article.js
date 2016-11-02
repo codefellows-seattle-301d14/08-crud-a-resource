@@ -21,6 +21,7 @@
     // webDb helps us query our data
     webDB.execute(
       'CREATE TABLE IF NOT EXISTS articles (' +
+      'id INTEGER PRIMARY KEY, ' +
       'title VARCHAR, ' +
       'category VARCHAR, ' +
       'author VARCHAR, ' +
@@ -71,11 +72,13 @@
               article.insertRecord();
             });
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM articles', // <-----TODO: query our table for articles once more
               function(rows) {
                 // TODO:
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
@@ -89,7 +92,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': ' DELETE FROM articles WHERE id = ? ', // <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -98,7 +101,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM articles;' // <----TODO: delete all records from the articles table.
     );
   };
 
@@ -141,6 +144,6 @@
   };
 
 // TODO: ensure that our table has been created.
-
+  Article.createTable();
   module.Article = Article;
 })(window);
