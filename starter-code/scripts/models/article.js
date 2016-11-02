@@ -59,12 +59,13 @@
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
               var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-              /* TODO:
+              /* DONE:
                1 - 'insert' the newly-instantiated article in the DB:
              */
+              article.insertRecord();
             });
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM articles', // <-----TODO: query our table for articles once more
               function(rows) {
                 // TODO:
                 // 1 - Use Article.loadAll to process our rows,
