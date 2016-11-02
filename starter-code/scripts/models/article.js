@@ -46,13 +46,15 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      '', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM articles', // <-----DONE: fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
-        /* TODO:
+        /* DONE:
            1 - Use Article.loadAll to instanitate these rows,
            2 - invoke the function that was passed in to fectchAll */
+          Article.loadAll(rows);
+          nextFunction();
         } else {
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
