@@ -26,8 +26,8 @@
       'category VARCHAR, ' +
       'author VARCHAR, ' +
       'authorURL VARCHAR, ' +
-      'publishedOn DATE ' +
-      'body VARCHAR);', // TODO:DONE What SQL command do we run here inside these quotes? DONE
+      'publishedOn DATE, ' +
+      'body VARCHAR);', // TODO:DONE What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -101,7 +101,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE * FROM blogarticles;' // <----TODO:DONE delete all records from the articles table.
     );
   };
 
@@ -144,6 +144,6 @@
   };
 
 // TODO: ensure that our table has been created.
-
   module.Article = Article;
+  module.Article.createTable();
 })(window);
