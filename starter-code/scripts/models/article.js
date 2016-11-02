@@ -58,7 +58,7 @@
             responseData.forEach(function(obj) {
               var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
               /* TODO:
-               1 - 'insert' the newly-instantiated article in the DB:
+               1 - 'insert' the newly-instantiated article in the DB: see method on line 37
              */
             });
             webDB.execute(
