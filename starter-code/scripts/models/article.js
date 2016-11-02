@@ -20,7 +20,7 @@
   Article.createTable = function() {
     // webDb helps us query our data
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE if not exists articles (id INTEGER PRIMARY KEY, title VARCHAR, category VARCHAR, author VARCHAR, authorURL VARCHAR, publishedOn DATE, body TEXT)', // TODO: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
