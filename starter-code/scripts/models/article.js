@@ -45,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO:DONE complete our SQL query here, inside the quotes. DONE
+        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);', // <----- TODO:DONE complete our SQL query here, inside the quotes. DONE
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -53,7 +53,7 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      'SELECT * FROM blogarticles', // <-----TODO:DONE fill these quotes to query our table.
+      'SELECT * FROM blogarticles;', // <-----TODO:DONE fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
@@ -72,7 +72,7 @@
               article.insertRecord();
             });
             webDB.execute(
-              'SELECT * FROM blogarticles', // <-----TODO:DONE query our table for articles once more
+              'SELECT * FROM blogarticles;', // <-----TODO:DONE query our table for articles once more
               function(rows) {
                 // TODO:DONE
                 // 1 - Use Article.loadAll to process our rows,
@@ -92,7 +92,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': 'DELETE FROM blogarticles WHERE id = ' + this.id,// <---TODO:DONE Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM blogarticles WHERE id = ' + this.id + ';',// <---TODO:DONE Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
