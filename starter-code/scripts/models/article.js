@@ -27,7 +27,7 @@
       'author VARCHAR, ' +
       'authorURL VARCHAR, ' +
       'publishedOn DATE ' +
-      'body VARCHAR);', // TODO: What SQL command do we run here inside these quotes? DONE
+      'body VARCHAR);', // TODO:DONE What SQL command do we run here inside these quotes? DONE
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -45,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO: complete our SQL query here, inside the quotes. DONE
+        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?)', // <----- TODO:DONE complete our SQL query here, inside the quotes. DONE
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -53,11 +53,11 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      'SELECT * FROM blogarticles', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM blogarticles', // <-----TODO:DONE fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
-        /* TODO:
+        /* TODO:DONE
            1 - Use Article.loadAll to instanitate these rows,
            2 - invoke the function that was passed in to fectchAll */
           Article.loadAll(rows);
@@ -66,15 +66,15 @@
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
               var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-              /* TODO:
+              /* TODO:DONE
                1 - 'insert' the newly-instantiated article in the DB:
              */
               article.insertRecord();
             });
             webDB.execute(
-              'SELECT * FROM blogarticles', // <-----TODO: query our table for articles once more
+              'SELECT * FROM blogarticles', // <-----TODO:DONE query our table for articles once more
               function(rows) {
-                // TODO:
+                // TODO:DONE
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
                 Article.loadAll(rows);
@@ -92,7 +92,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM blogarticles WHERE id = ' + this.id,// <---TODO:DONE Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
