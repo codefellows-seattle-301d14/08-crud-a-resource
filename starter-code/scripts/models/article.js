@@ -10,7 +10,7 @@
 
   Article.prototype.toHtml = function(scriptTemplateId) {
     var template = Handlebars.compile(scriptTemplateId.text());
-    this.daysAgo = parseInt((new Date() - new Date(this.publishedOn))/60/60/24/1000);
+    this.daysAgo = parseInt((new Date() - new Date(this.publishedOn)) / 60 / 60 / 24 / 1000);
     this.publishStatus = this.publishedOn ? 'published ' + this.daysAgo + ' days ago' : '(draft)';
     this.body = marked(this.body);
     return template(this);
@@ -20,7 +20,14 @@
   Article.createTable = function() {
     // webDb helps us query our data
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS blogarticles (' +
+      'id INTEGER PRIMARY KEY, ' +
+      'title VARCHAR, ' +
+      'category VARCHAR, ' +
+      'author VARCHAR, ' +
+      'authorURL VARCHAR, ' +
+      'publishedOn DATE, ' +
+      'body VARCHAR);', // TODO:DONE What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -38,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': '', // <----- TODO: complete our SQL query here, inside the quotes.
+        'sql': 'INSERT INTO blogarticles (title, category, author, authorURL, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);', // <----- TODO:DONE complete our SQL query here, inside the quotes. DONE
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -46,27 +53,32 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      '', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM blogarticles;', // <-----TODO:DONE fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
-        /* TODO:
+        /* TODO:DONE
            1 - Use Article.loadAll to instanitate these rows,
            2 - invoke the function that was passed in to fectchAll */
+          Article.loadAll(rows);
+          nextFunction();
         } else {
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
               var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-              /* TODO:
+              /* TODO:DONE
                1 - 'insert' the newly-instantiated article in the DB:
              */
+              article.insertRecord();
             });
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM blogarticles;', // <-----TODO:DONE query our table for articles once more
               function(rows) {
-                // TODO:
+                // TODO:DONE
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
@@ -80,7 +92,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM blogarticles WHERE id = ?;',// <---TODO:DONE Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -89,7 +101,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM blogarticles;' // <----TODO:DONE delete all records from the articles table.
     );
   };
 
@@ -132,6 +144,6 @@
   };
 
 // TODO: ensure that our table has been created.
-
   module.Article = Article;
+  module.Article.createTable();
 })(window);
