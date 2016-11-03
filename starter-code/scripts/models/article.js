@@ -39,7 +39,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': 'INSERT INTO articles (title ,category, author, authorURL, publishedURL, body) VALUES(?,?,?,?,?,?);', // <----- TODO: complete our SQL query here, inside the quotes.
+        'sql': 'INSERT INTO articles (title ,category, author, authorURL, publishedOn, body) VALUES(?,?,?,?,?,?);',// <----- TODO: complete our SQL query here, inside the quotes.
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -63,7 +63,7 @@
               /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
              */
-              'INSERT into articles ('+ article+') VALUES(?)';
+              article.insertRecord();
             });
             webDB.execute(
               'SELECT * FROM articles', // <-----TODO: query our table for articles once more
@@ -86,7 +86,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM table WHERE id= ?', // <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -95,7 +95,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE * FROM articles' // <----TODO: delete all records from the articles table.
     );
   };
 
