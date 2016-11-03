@@ -69,13 +69,21 @@
               /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
              */
+              webDB.execute(
+                 [{
+                   'sql': 'INSERT INTO articleTable (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+                   'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
+                 }]
+              );
             });
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM articleTable;', // <-----TODO: query our table for articles once more
               function(rows) {
-                // TODO:
+                // TODO: Done
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
@@ -89,7 +97,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM articleTable WHERE(id) VALUE(?)', // <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -98,7 +106,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM articleTable;' // <----TODO: delete all records from the articles table.
     );
   };
 
@@ -141,6 +149,6 @@
   };
 
 // TODO: ensure that our table has been created.
-
+  Article.createTable();
   module.Article = Article;
 })(window);
