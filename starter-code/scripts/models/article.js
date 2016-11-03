@@ -20,7 +20,14 @@
   Article.createTable = function() {
     // webDb helps us query our data
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS articleTable (' +
+     'id INTEGER PRIMARY KEY, ' +
+     'title TEXT, ' +
+     'category TEXT, ' +
+     'author TEXT, ' +
+     'authorUrl TEXT, ' +
+     'publishedOn INTEGER, ' +
+     'body TEXT);', // TODO: What SQL command do we run here inside these quotes?
       function() {
         console.log('Successfully set up the articles table.');
       }
@@ -38,7 +45,7 @@
     webDB.execute(
       [{
         // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': '', // <----- TODO: complete our SQL query here, inside the quotes.
+        'sql': 'INSERT INFO articleTable (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);', // <----- TODO: complete our SQL query here, inside the quotes.
         'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
       }]
     );
@@ -46,13 +53,15 @@
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      '', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM articleTable;', // <-----TODO: fill these quotes to query our table.
       function(rows) {
         // if we have data in the table
         if (rows.length) {
         /* TODO:
            1 - Use Article.loadAll to instanitate these rows,
            2 - invoke the function that was passed in to fectchAll */
+          Article.loadAll(rows);
+          nextFunction();
         } else {
           $.getJSON('/data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
@@ -60,13 +69,21 @@
               /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
              */
+              webDB.execute(
+                 [{
+                   'sql': 'INSERT INTO articleTable (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+                   'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
+                 }]
+              );
             });
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM articleTable;', // <-----TODO: query our table for articles once more
               function(rows) {
-                // TODO:
+                // TODO: Done
                 // 1 - Use Article.loadAll to process our rows,
                 // 2 - invoke the function that was passed in to fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
@@ -80,7 +97,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM articleTable WHERE(id) VALUE(?)', // <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -89,7 +106,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM articleTable;' // <----TODO: delete all records from the articles table.
     );
   };
 
@@ -132,6 +149,6 @@
   };
 
 // TODO: ensure that our table has been created.
-
+  Article.createTable();
   module.Article = Article;
 })(window);
