@@ -70,7 +70,7 @@
               /* TODO:
                1 - 'insert' the newly-instantiated article in the DB:
              */
-              Article.insertRecord();
+              article.insertRecord();
             });
             webDB.execute(
               'SELECT * FROM articles', // DONE! <-----TODO: query our table for articles once more
@@ -93,7 +93,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': 'DELETE FROM articles WHERE id = ?', // DONE! <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM articles WHERE id = ' + this.id + ';', // DONE! <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -145,7 +145,7 @@
   };
 
 // DONE! TODO: ensure that our table has been created.
-  Article.createTable();
 
   module.Article = Article;
+  module.Article.createTable();
 })(window);
