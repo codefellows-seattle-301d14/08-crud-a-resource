@@ -16,18 +16,25 @@
     return template(this);
   };
 
-  // Set up a table for articles.
+  // Set up a DB table for articles.
   Article.createTable = function() {
-    // webDb helps us query our data
     webDB.execute(
-      '', // TODO: What SQL command do we run here inside these quotes?
+      // TODO:  - What SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS hackerIpsum (' +
+      'id INTEGER PRIMARY KEY,' +
+      'title VARCHAR,' +
+      'category VARCHAR,' +
+      'author VARCHAR,' +
+      'authorUrl VARCHAR,' +
+      'publishedOn DATE,' +
+      'body VARCHAR);',
       function() {
         console.log('Successfully set up the articles table.');
       }
     );
   };
 
-  // NOTE: Refactored to expect articles from the database, rather than localStorage.
+  // NOTE: Refactor to expect the data from the database, rather than localStorage.
   Article.loadAll = function(rows) {
     Article.allArticles = rows.map(function(ele) {
       return new Article(ele);
@@ -36,37 +43,47 @@
 
   Article.prototype.insertRecord = function() {
     webDB.execute(
-      [{
-        // NOTE: this method will be called elsewhere after we retrieve our JSON
-        'sql': '', // <----- TODO: complete our SQL query here, inside the quotes.
-        'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
-      }]
+      [
+        {
+          // NOTE: this method will be called elsewhere after we retrieve our JSON
+          'sql': 'INSERT INTO hackerIpsum (title, category, author, authorUrl, publishedOn, body) VALUES(?, ?, ?, ?, ?, ?);', // <----- TODO: DONE - complete our SQL query here, inside the quotes.
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body]
+        }
+      ]
     );
   };
 
   Article.fetchAll = function(nextFunction) {
     webDB.execute(
-      '', // <-----TODO: fill these quotes to query our table.
+      'SELECT * FROM hackerIpsum', // <-----TODO: fill these quotes to query our table.
       function(rows) {
-        // if we have data in the table
         if (rows.length) {
-        /* TODO:
+        /* TODO-
            1 - Use Article.loadAll to instanitate these rows,
-           2 - invoke the function that was passed in to fectchAll */
+           2 - Pass control to the view by invoking the next function that
+                was passed in to Article.fetchAll */
+          Article.loadAll(rows);
+          nextFunction();
         } else {
-          $.getJSON('/data/hackerIpsum.json', function(responseData) {
+          $.getJSON('data/hackerIpsum.json', function(responseData) {
             responseData.forEach(function(obj) {
               var article = new Article(obj); // This will instantiate an article instance based on each article object from our JSON.
-              /* TODO:
+              /* TODO -  :
                1 - 'insert' the newly-instantiated article in the DB:
              */
+              Article.allArticles.push(article);
+              article.insertRecord();
+
             });
+            // Now get ALL the records out of the database:
             webDB.execute(
-              '', // <-----TODO: query our table for articles once more
+              'SELECT * FROM hackerIpsum', // <-----TODO: query our table
               function(rows) {
-                // TODO:
+                // TODO - DONE:
                 // 1 - Use Article.loadAll to process our rows,
-                // 2 - invoke the function that was passed in to fetchAll
+                // 2 - Pass control to the view by calling the next function that was passed in to Article.fetchAll
+                Article.loadAll(rows);
+                nextFunction();
               });
           });
         }
@@ -80,7 +97,7 @@
         {
           /* NOTE: this is an advanced admin option, so you will need to test
               out an individual query in the console */
-          'sql': '', // <---TODO: Delete an article instance from the database based on its id:
+          'sql': 'DELETE FROM hackerIpsum WHERE id = ?', // <---TODO: Delete an article instance from the database based on its id:
           'data': [this.id]
         }
       ]
@@ -89,7 +106,7 @@
 
   Article.clearTable = function() {
     webDB.execute(
-      'DELETE ...;' // <----TODO: delete all records from the articles table.
+      'DELETE FROM hackerIpsum;' // <----TODO: Done - delete all records from the articles table.
     );
   };
 
@@ -97,9 +114,9 @@
     return Article.allArticles.map(function(article) {
       return article.author;
     })
-    .reduce(function(uniqueNames, curName) {
-      if (uniqueNames.indexOf(curName) === -1) {
-        uniqueNames.push(curName);
+    .reduce(function(uniqueNames, name) {
+      if (uniqueNames.indexOf(name) === -1) {
+        uniqueNames.push(name);
       }
       return uniqueNames;
     }, []);
@@ -131,7 +148,7 @@
     });
   };
 
-// TODO: ensure that our table has been created.
-
+// TODO:  - ensure that our table has been setup.
+  Article.createTable();
   module.Article = Article;
 })(window);
